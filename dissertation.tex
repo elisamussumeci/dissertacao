@@ -1,0 +1,200 @@
+\documentclass[12pt]{report}
+\usepackage{setspace}
+\usepackage{amsmath,amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage[pdftex,bookmarks=true,bookmarksopen=false,bookmarksnumbered=true,colorlinks=true,linkcolor=black]{hyperref}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+{\LARGE Getulio Vargas Foundation}\\
+\vspace{0.3cm}
+{\LARGE Applied Mathematics School}\\
+\vspace{0.3cm}
+
+\par
+\vspace{170pt}
+  \textbf{\Large {Using hierarchical clustering of timeseries for variable selection in Dengue forecasting}
+}\\
+\vspace{32pt}
+{\Large Elisa Mussumeci}\\
+\end{center}
+
+\par
+\vfill
+\begin{center}
+{{\normalsize Rio de Janeiro}\\
+{\normalsize \the\year}}
+\end{center}
+\end{titlepage}
+
+\thispagestyle{empty}
+
+\newpage
+\begin{center}
+\textbf{\LARGE Elisa Mussumeci}
+
+\par
+\vspace{200pt}
+\textbf{\Large Using hierarchical clustering of timeseries for variable selection in Dengue forecasting}
+\end{center}
+
+\par
+\vspace{85pt}
+\hspace*{175pt}\parbox{7.6cm}{{\normalsize Dissertação submetida à Escola de Matemática Aplicada como requisito parcial para a obtenção do grau de Mestre em Modelagem Matemática da Informação.}}
+
+\par
+\vspace{1em}
+\hspace*{125pt}\parbox{10.0cm}{{\normalsize Área de Concentração: }}
+
+\par
+\vspace{1em}
+\hspace*{125pt}\parbox{10.0cm}{{\normalsize Orientador: Flávio Codeço Coelho}}\\
+
+\par
+\vfill
+\begin{center}
+{{\normalsize Rio de Janeiro}\\
+{\normalsize \the\year}}
+\end{center}
+
+\thispagestyle{empty}
+
+\newpage
+\noindent{\textbf{\large Acknowledgements}}\\
+\doublespacing
+Gostaria de agradecer....
+
+\thispagestyle{empty}
+
+\newpage
+\begin{center}
+\textbf{\normalsize Resumo}
+\end{center}
+\vspace{1pt}
+
+resumo...
+
+\thispagestyle{empty}
+
+\newpage
+\begin{center}
+\textbf{\normalsize Abstract}
+\end{center}
+\vspace{1pt}
+
+We use the Infodengue database of incidence and climate time-series, to train predictive models for the weekly number of cases of dengue in 733 cities of Brazil. To overcome limitation in the length of timeseries available to train the model, we included the time series of similar cities as predictors in the model of each city. The LSTM recurrent neural network model attained the highest performance in predicting future incidence on dengue in cities of different sizes. 
+
+\thispagestyle{empty}
+
+\newpage
+\tableofcontents
+\listoffigures
+\thispagestyle{empty}
+
+\newpage
+\chapter{Introduction}
+
+Understanding and therefore being able to predict the incidence of seasonal diseases is a big challenge due in part to the complex cycles these diseases display but also to  incomplete records of historical disease incidence and other cofactors affecting risk. Besides the cycles are strongly influenced by local climate  and other contextual variables making it hard to extrapolate findings from one geographical area to another.
+
+For vector-borne diseases, the complexity is compounded by the coupling of the transmission of the dynamics in humans with the population dynamics of the vector species.
+
+Having complete datasets for large geographical areas can help this effort as one can study the effects of spatial and climatic gradients on the intrinsic dynamics of disease transmission. 
+
+In this paper, we use the Infodengue[ref] database of more than 700 municipalities of Brasil to develop predictive models capable of predicting the weekly incidence of Dengue in various regions of Brazil across a wide range of latitudes and climate characteristics.
+
+\newpage
+\section{Literature Review}
+
+\newpage
+\chapter{Methodology}
+
+For the forecasting model, we used data from the Infodengue project. Weekly 
+incidence, minimum and maximum temperature, minimum and maximum humidity and 
+atmospheric pressure series wher obtained for every city in the dataset.
+
+Cities were clustered based on the correlation distance (eq xx) between 
+incidence time series within each state.
+
+For each city, a feature matrix was assembled from the set of time series of 
+each other time series from its cluster.
+
+A LSTM model was defined with topology given in table xx. the model was trained 
+for 300 epoch using a custom loss function defined in equation (xx) A look back 
+of 4 weeks a forecasting window of 10 weeks were chosen.
+
+A single city model was trained for a few selected cities to serve as a 
+baseline against which to compare the effectiveness of the using sister 
+cities (within the same cluster) cluster as predictors.
+
+\section{Cluster Construction}
+
+\section{}
+
+\newpage
+\begin{figure}[H]
+\centering
+\label{fig:outra}
+%left bottom right top
+%\includegraphics[trim=10mm 00mm 00mm 00mm, scale=0.40]{tabela.pdf}
+
+\caption{outra figura}
+
+\end{figure}
+
+
+
+\subsection{yy}
+
+Como podemos ver nas equações \ref{eq:normal} e \ref{eq:normal2}, somos mais que normais.
+
+
+\begin{align}\label{eq:normal}
+f(x \; | \; \mu, \sigma) &= \frac{1}{\sigma\sqrt{2\pi} } \; e^{ -\frac{(x-\mu)^2}{2\sigma^2} }\\
+f(x \; | \; \mu, \sigma) &= \frac{1}{\sigma\sqrt{2\pi} } \; e^{ -\frac{(x-\mu)^2}{2\sigma^2} }
+\end{align} \label{eq:normal2}
+
+xx
+
+\begin{align*}
+Vm_{i}(p,l) = ((-1.9141)p + 49.466)l + ((199.51)p - 10795.0), \text {$l$=0} \tag{4}
+\end{align*}
+
+\begin{align*}
+f_{n}(y) = \frac{y}{1000}, \tag{5}
+\end{align*}
+
+
+\newpage
+\chapter{Results, Conclusions and Final Considerations}
+
+\newpage
+\section{Results}
+
+\newpage
+\section{Conclusions and Final Considerations}
+
+The model has show good performance for both large and small cities from 
+various parts of Brasil. This shows that the set of predictor series selected 
+is capable to characterize the epidemic dynamics.
+
+The extra information provided by the sister cities' series alowed the 
+model to substantially outperform the base model. The LSTM model was 
+capable of consistently predict the incidence pattern of non-epidemic years. 
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{model1-num-names}
+\bibliography{sample}
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Appendices}
+llalalala
+
+\end{document}
