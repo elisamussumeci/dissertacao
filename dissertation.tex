@@ -111,13 +111,14 @@ In this paper, we use the Infodengue[ref] database of more than 700 municipaliti
 \section{Literature Review}
 
 \newpage
-\chapter{Methodology}
+\chapter{Article}
 
+\section{Methodology}
 For the forecasting model, we used data from the Infodengue project. Weekly 
 incidence, minimum and maximum temperature, minimum and maximum humidity and 
 atmospheric pressure series wher obtained for every city in the dataset.
 
-Cities were clustered based on the correlation distance (eq xx) between 
+% Cities were clustered based on the correlation distance (eq xx) between 
 incidence time series within each state.
 
 For each city, a feature matrix was assembled from the set of time series of 
@@ -131,52 +132,13 @@ A single city model was trained for a few selected cities to serve as a
 baseline against which to compare the effectiveness of the using sister 
 cities (within the same cluster) cluster as predictors.
 
-\section{Cluster Construction}
-
-\section{}
-
-\newpage
-\begin{figure}[H]
-\centering
-\label{fig:outra}
-%left bottom right top
-%\includegraphics[trim=10mm 00mm 00mm 00mm, scale=0.40]{tabela.pdf}
-
-\caption{outra figura}
-
-\end{figure}
-
-
-
-\subsection{yy}
-
-Como podemos ver nas equações \ref{eq:normal} e \ref{eq:normal2}, somos mais que normais.
-
-
-\begin{align}\label{eq:normal}
-f(x \; | \; \mu, \sigma) &= \frac{1}{\sigma\sqrt{2\pi} } \; e^{ -\frac{(x-\mu)^2}{2\sigma^2} }\\
-f(x \; | \; \mu, \sigma) &= \frac{1}{\sigma\sqrt{2\pi} } \; e^{ -\frac{(x-\mu)^2}{2\sigma^2} }
-\end{align} \label{eq:normal2}
-
-xx
-
-\begin{align*}
-Vm_{i}(p,l) = ((-1.9141)p + 49.466)l + ((199.51)p - 10795.0), \text {$l$=0} \tag{4}
-\end{align*}
-
-\begin{align*}
-f_{n}(y) = \frac{y}{1000}, \tag{5}
-\end{align*}
-
-
-\newpage
-\chapter{Results, Conclusions and Final Considerations}
-
-\newpage
 \section{Results}
+The cluster found within each state are shown in figures ... The clusters can 
+also be seen in the map in figures xxx.
+Figures xx and yy show the performance of the prediction  both \emph{in-sample} 
+and  \emph{out-of-sample}.
 
-\newpage
-\section{Conclusions and Final Considerations}
+\section{Discussion}
 
 The model has show good performance for both large and small cities from 
 various parts of Brasil. This shows that the set of predictor series selected 
@@ -185,6 +147,9 @@ is capable to characterize the epidemic dynamics.
 The extra information provided by the sister cities' series alowed the 
 model to substantially outperform the base model. The LSTM model was 
 capable of consistently predict the incidence pattern of non-epidemic years. 
+
+\newpage
+\chapter{Conclusions and Final Considerations}
 
 \newpage
 \phantomsection
