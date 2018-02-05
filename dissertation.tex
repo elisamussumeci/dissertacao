@@ -40,7 +40,7 @@
 
 \par
 \vspace{200pt}
-\textbf{\Large Using hierarchical clustering of timeseries for variable selection in Dengue forecasting}
+\textbf{\Large Machine learning aproach for Dengue forecasting - Comparing LSTM, Random Forest and Lasso}
 \end{center}
 
 \par
@@ -112,9 +112,21 @@ In this paper, we use the Infodengue[ref] database of more than 700 municipaliti
 
 \section{Epidemic forecasting}
  
- falar sobre o que é uma predição epidemica e quais metodos tem sido utilizados até então. 
+Time series forecasting consists in use models to predict future values based on previously observed values.
  
- Explicar um pouco de cada método.
+ 
+In epidemiology studies, forecasting is important to understand disease spread over a period of time
+
+It's commom to use time series forecasting models to predict epidemic
+ 
+The most comon models used for epidemic forecasting are:
+ 
+ \begin{description}
+  \item Autoregressive Integrated Moving Average (ARIMA)
+  \item Seasonal Autoregressive Integrated Moving Average (SARIMA)
+  \item VAR
+ \end{description}
+
  
 \subsection{Multi time series forecast}
 
@@ -122,12 +134,67 @@ Apresentar a diferença entre predição de series temporas simples e multiplas.
 
 \subsection{Data modeling and cluster analysis}
 
-\section{Neural networks}
+
+\section{Machine Learning and forecasting}
+
+machine learning is bla bla
+
+machine learning techniques have been used to forecast as show in ref and ref. It bring good results since
+it cand bla bla ref.
+
+Neural networks is one technique that has been researched quite 
+extensively, and has often been shown to beat time series approaches ref 
+
+explain why these kind of models are good for forecasting
+
+\subsection{Random Forest and Lasso}
+
+\begin{description}
+ \item Random Forest
+  
+ Random forests  are an ensemble learning method for classification, 
+ regression and other tasks, that operate by constructing a multitude of decision trees at training time 
+ and outputting the class that is the mode of the classes (classification) or mean prediction (regression) 
+ of the individual trees.
+ 
+ Decision tree learning is a method commonly used in data mining. The goal is to create a model 
+ that predicts the value of a target variable based on several input variables. 
+ 
+ The difference between Random Forest algorithm and the decision tree algorithm is that in 
+ Random Forest, the process es of finding the root node and splitting the feature nodes will run
+ randomly.
+ 
+ Add formula
+ 
+ \item Lasso
+ 
+ In statistics and machine learning, lasso (least absolute shrinkage and selection operator)
+ (also Lasso or LASSO) is a regression analysis method that performs both variable selection and
+ regularization in order to enhance the prediction accuracy and interpretability of the statistical
+ model it produces. It was introduced by Robert Tibshirani in 1996 based on Leo Breiman’s
+ nonnegative garrote.
+ 
+ Lasso was originally introduced in the context of least squares, and it can be instructive to consider 
+ this case first, since it illustrates many of lasso’s properties in a straightforward setting.
+ 
+\end{description}
+
 
 \subsection{Long-short term memory (LSTM)}
 
-\subsection{Neural networks and forecasting}
+Recurrent neural networks ADD REF are neural networks with loops in them, allowing information
+to persist. They can be thought of as multiple copies of the same network, each passing a message
+to a successor.
 
+RNN's have great performance  in most cases but they can't handle long-term dependencies. That 
+means that when the gap between the relevant information and the output is too large, the network
+become unable to learn to connect the information.
+
+Long Short Term Memory networks (add ref )are a special kind of RNN, capable of learning
+such long-term dependencies. In each cell of chain the network decides whoch informations to keep
+and which to forget, etcs
+
+add colah diagram step by step
 
 \newpage
 \chapter{Article}
@@ -137,48 +204,81 @@ Apresentar a diferença entre predição de series temporas simples e multiplas.
 
 \subsection{Data sources}
 
-For the forecasting model, we used data from the Infodengue project. Weekly 
+The data used in the article was collected from the infodengue project. 
+
+The infodengue project \cite{codeco2016infodengue} is a alert system of the number of dengue cases registered in the 
+cities of Brazil, aiming to provide  information to the population.
+
+This dataset consist information are provided by the health secreaty of each city, and consists of 
 incidence, minimum and maximum temperature, minimum and maximum humidity and 
-atmospheric pressure series wher obtained for every city in the dataset.
+atmospheric pressure series for each week. The data if from 2011 until nowday (fix).
+
+Add states and number of cities of each one 
+
+Add example of data.
 
 \subsection{Data modeling}
 
- Cities were clustered based on the correlation distance (eq xx) between 
-incidence time series within each state.
+Some cities have the incidence series very similar, what makes us thing that using the information 
+of cities nearby or with similar climate may have some influence in the number of dengue cases.
+
+ADD SOME GRAPH 
+
+In order to input the maximum number o relevant information to the model without overload the model,
+we clustered the data based on the correlation distances between incidence time series within each state.
+
+add the formula of the correlation used, add
+
+talk about hierarquical clustering and the treshold used, image example of a h cluster.
 
 For each city, a feature matrix was assembled from the set of time series of 
 each other time series from its cluster.
 
-
-\subsection{Forecasting}
-
-A LSTM model was defined with topology given in table xx. the model was trained 
-for 300 epoch using a custom loss function defined in equation (xx) A look back 
-of 4 weeks a forecasting window of 10 weeks were chosen.
+matrix example of the data clustered
 
 A single city model was trained for a few selected cities to serve as a 
 baseline against which to compare the effectiveness of the using sister 
 cities (within the same cluster) cluster as predictors.
 
+\subsection{Forecasting}
+
+We tried tree diferent models bla bla
+
+
 \begin{description}
  \item \textbf{Random Forest}
  
+ falar sobre modelagem, 
  \item \textbf{Long short term memory (LSTM)}
  
- \item \textbf{Tpot - Lasso}
+ A LSTM model was defined with topology given in table xx. the model was trained 
+for 300 epoch using a custom loss function defined in equation (xx) A look back 
+of 4 weeks a forecasting window of 10 weeks were chosen.
+
+ 
+ \item \textbf{Lasso}
  
 \end{description}
 
 
 \section{Results}
+
+\subsection{Cluster analysis}
 The cluster found within each state are shown in figures ... The clusters can 
 also be seen in the map in figures xxx.
+\begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.4]{./cluster_3300209.png}
+ % cluster_3300209.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{cluster}
+\end{figure}
+
+\subsection{Forecasting}
+
 Figures xx and yy show the performance of the prediction  both \emph{in-sample} 
 and  \emph{out-of-sample}.
 
-\subsection{Cluster analysis}
-
-\subsection{Forecasting}
+forecasting with cluster and without cluster?
 
 \section{Discussion}
 
