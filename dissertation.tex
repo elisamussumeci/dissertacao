@@ -6,6 +6,7 @@
 \usepackage[pdftex,bookmarks=true,bookmarksopen=false,bookmarksnumbered=true,colorlinks=true,linkcolor=black]{hyperref}
 \usepackage{float}
 \usepackage[utf8]{inputenc}
+\usepackage{natbib}
 
 \begin{document}
 
@@ -203,10 +204,9 @@ add colah diagram step by step
 
 
 \subsection{Data sources}
-
 The data used in the article was collected from the infodengue project. 
 
-The infodengue project \cite{codeco2016infodengue} is a alert system of the number of dengue cases registered in the 
+The infodengue project \citep{codeco2016infodengue} is a alert system of the number of dengue cases registered in the 
 cities of Brazil, aiming to provide  information to the population.
 
 This dataset consist information are provided by the health secreaty of each city, and consists of 
@@ -282,13 +282,9 @@ forecasting with cluster and without cluster?
 
 \section{Discussion}
 
-The model has show good performance for both large and small cities from 
-various parts of Brasil. This shows that the set of predictor series selected 
-is capable to characterize the epidemic dynamics.
+The model has show good performance for both large and small cities from various parts of Brasil. This shows that the set of predictor series selected is capable to characterize the epidemic dynamics.
 
-The extra information provided by the sister cities' series alowed the 
-model to substantially outperform the base model. The LSTM model was 
-capable of consistently predict the incidence pattern of non-epidemic years. 
+The extra information provided by the sister cities' series alowed the model to substantially outperform the base model. The LSTM model was capable of consistently predict the incidence pattern of non-epidemic years. 
 
 \newpage
 \chapter{Conclusions and Final Considerations}
