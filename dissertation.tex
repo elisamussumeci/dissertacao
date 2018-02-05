@@ -100,6 +100,10 @@ We use the Infodengue database of incidence and climate time-series, to train pr
 \newpage
 \chapter{Introduction}
 
+
+The quick spread of diseases like Dengue, Zika and Chikungunya impacts the health, social, and economies of many countries around the world. That makes prediction models for epidemiological time series very relevant, since it can help the health authorities and the population to prepare for a potential epidemic \citep{luz2008time}. 
+
+
 Understanding and therefore being able to predict the incidence of seasonal diseases is a big challenge due in part to the complex cycles these diseases display but also to  incomplete records of historical disease incidence and other cofactors affecting risk. Besides the cycles are strongly influenced by local climate  and other contextual variables making it hard to extrapolate findings from one geographical area to another.
 
 For vector-borne diseases, the complexity is compounded by the coupling of the transmission of the dynamics in humans with the population dynamics of the vector species.
@@ -110,6 +114,10 @@ In this paper, we use the Infodengue[ref] database of more than 700 municipaliti
 
 \newpage
 \chapter{Literature Review}
+
+\section{Time Series}
+\subsection{Multiple time series regression}
+
 
 \section{Epidemic forecasting}
  
@@ -128,13 +136,11 @@ The most comon models used for epidemic forecasting are:
   \item VAR
  \end{description}
 
- 
-\subsection{Multi time series forecast}
-
 Apresentar a diferença entre predição de series temporas simples e multiplas. Explicar cada modelo que vem sendo utilizado em prediçao multipla
 
-\subsection{Data modeling and cluster analysis}
 
+\section{Hierarchical Clustering}
+\subsection{clustering time series}
 
 \section{Machine Learning and forecasting}
 
@@ -204,14 +210,11 @@ add colah diagram step by step
 
 
 \subsection{Data sources}
-The data used in the article was collected from the infodengue project. 
+The dataset used in the article was provided by the InfoDengue project. 
 
-The infodengue project \citep{codeco2016infodengue} is a alert system of the number of dengue cases registered in the 
-cities of Brazil, aiming to provide  information to the population.
+InfoDengue \citep{Codeco046193} is an integrated dengue alert system, developed as a partnership between Oswaldo Cruz Foundation, Getulio Vargas Foundation and the Ministry of health. As a unique source of carefully curated data for epidemiological studies, InfoDengue monitors 604 cities in Brazil, predicting the weekly number of new cases of dengue in each one of them.
 
-This dataset consist information are provided by the health secreaty of each city, and consists of 
-incidence, minimum and maximum temperature, minimum and maximum humidity and 
-atmospheric pressure series for each week. The data if from 2011 until nowday (fix).
+ past incidence, temperature, humidity, pressure, precipitation intensity, and tweets about Dengue in the region. 
 
 Add states and number of cities of each one 
 
@@ -298,6 +301,5 @@ The extra information provided by the sister cities' series alowed the model to 
 \newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{Appendices}
-llalalala
 
 \end{document}
