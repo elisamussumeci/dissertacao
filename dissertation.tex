@@ -2,6 +2,7 @@
 \usepackage{setspace}
 \usepackage{amsmath,amssymb}
 \usepackage{amsfonts}
+\usepackage{todonotes}
 \usepackage{graphicx}
 \usepackage[pdftex,bookmarks=true,bookmarksopen=false,bookmarksnumbered=true,colorlinks=true,linkcolor=black]{hyperref}
 \usepackage{float}
@@ -104,13 +105,15 @@ We use the Infodengue database of incidence and climate time-series, to train pr
 The quick spread of diseases like Dengue, Zika and Chikungunya impacts the health, social, and economies of many countries around the world. That makes prediction models for epidemiological time series very relevant, since it can help the health authorities and the population to prepare for a potential epidemic \citep{luz2008time}. 
 
 
-Understanding and therefore being able to predict the incidence of seasonal diseases is a big challenge due in part to the complex cycles these diseases display but also to  incomplete records of historical disease incidence and other cofactors affecting risk. Besides the cycles are strongly influenced by local climate  and other contextual variables making it hard to extrapolate findings from one geographical area to another.
+Understanding and therefore being able to predict the incidence of vector-borne diseases is a big challenge due in part to the complex interplay between epidemiological and environmental determinants but also due to the frequent lack of long-term records of historical disease incidence and other cofactors affecting risk. This complex dynamics manifests itself in the variability of the of th incidence patterns in different geographical areas[ref].
 
-For vector-borne diseases, the complexity is compounded by the coupling of the transmission of the dynamics in humans with the population dynamics of the vector species.
+In the case of dengue, the effects of climate of the vector's population dynamics impose a marked seasonality which is then modulated by variations in the immunologica structure of the population as well as by human demography[ref].
 
-Having complete datasets for large geographical areas can help this effort as one can study the effects of spatial and climatic gradients on the intrinsic dynamics of disease transmission. 
+Modeling dengue incidence patterns in Brazil presents an aditional challenge characterized by the fact that the disease was reintroduced in the country in the 1980s having been absent for many decades. Therefore, basides the problem of short time series we are dealing with a disease which has yet to reach its endemic equilibrium. Any forecasting model hoping to grasp the complex temporal dynamics of dengue will require a large amount of data.
 
-In this paper, we use the Infodengue[ref] database of more than 700 municipalities of Brasil to develop predictive models capable of predicting the weekly incidence of Dengue in various regions of Brazil across a wide range of latitudes and climate characteristics.
+In this paper, we use the Infodengue[ref] database of more than 700 cities in Brasil since 2010. To make up for the relatively short timeseries, we use use incidence series from epidemiologically similar cities as predictors, together with relevant environmental timeseries for each city to fit predictive models capable of forecasting the weekly incidence of Dengue for any city of Brazil across a wide range of latitudes and climate characteristics.
+
+Instead of proposing parsimonious models built from previous knowledge of the determinants of dengue transmission, we fit machine learning models known for their ability to navigate their way into data intensive high dimensional problems, by integrating variable selection into their fitting routine. Namely we will compare the following models: LSTM, a recurrent deep neural network model[ref], Random Forest regression and LASSO regression[refs].
 
 \newpage
 \chapter{Literature Review}
@@ -214,52 +217,85 @@ The dataset used in the article was provided by the InfoDengue project.
 
 InfoDengue \citep{Codeco046193} is an integrated dengue alert system, developed as a partnership between Oswaldo Cruz Foundation, Getulio Vargas Foundation and the Ministry of health. As a unique source of carefully curated data for epidemiological studies, InfoDengue monitors 604 cities in Brazil, predicting the weekly number of new cases of dengue in each one of them.
 
- past incidence, temperature, humidity, pressure, precipitation intensity, and tweets about Dengue in the region. 
+The data consist of the weekly series of dengue incidence,  temperature, humidity, pressure, precipitation intensity, and tweets about Dengue in each observed city. It ranges from 2010 until today.
 
-Add states and number of cities of each one 
+\begin{figure}
+ \centering
+ \includegraphics[width=\textwidth]{rio_raw_series.png}
+ % rio_raw_series.png: 4000x4000 px, 400dpi, 25.40x25.40 cm, bb=0 0 720 720
+ \caption{Time series from Rio de Janeiro features}
+ \label{fig: rio_raw}
+\end{figure}
 
-Add example of data.
+
 
 \subsection{Data modeling}
 
-Some cities have the incidence series very similar, what makes us thing that using the information 
-of cities nearby or with similar climate may have some influence in the number of dengue cases.
+It is very difficult to accurately forecast the weekly incidence in a city based only on its historical data. This happens mainly because of the spatial component of disease transmission. Diseases perpetuate themselves by moving from population to population. The flow of individuals between cities is also an important factor.
 
-ADD SOME GRAPH 
+Dengue is a disease with a clear spatial dependency \citep{stoddard2013house,eisen2009use}. Therefore it makes sense to uses series from neighboring cities nearby in order to reduce uncertainty. Additionally, other cities not necessarily in the vicinity but which display similar historical series of incidence, can also be included as predictors.
 
-In order to input the maximum number o relevant information to the model without overload the model,
-we clustered the data based on the correlation distances between incidence time series within each state.
+In order to define the set of cities with relevant predictive information for each city, we clustered all cities within a state based on the correlation distances between incidence time series for each pair of cities. The clusters were calculated hierarchically, where the distance $d$ of each pair of clusters $(u,v)$ was given by the Farthest Point Algorithm:
 
-add the formula of the correlation used, add
+$$d(u,v) = max(dist(u[i],v[j])), $$
 
-talk about hierarquical clustering and the treshold used, image example of a h cluster.
+for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set to $0.6*max(z))$, where $z$ is the vector of the pairwise correlation distances of the cities. We can see in  \ref{fig:corr_rj} the correlation matrix of the cities from the state of Rio de Janeiro, the treshold define the distance between the clusters in \ref{fig:cluster_rj}.
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.4]{cluster_corr_RJ.png}
+ % cluster_corr_RJ.png: 3469x3389 px, 400dpi, 22.03x21.52 cm, bb=0 0 624 610
+ \caption{Distance matrix of cities for the state of Rio de Janeiro.}
+ \label{fig:corr_rj}
+\end{figure}
+
+
+\begin{figure}
+ \centering
+ \includegraphics[width=\textwidth]{clusterRJ_06.png}
+ % clusterRJ_0.6.png: 5971x2894 px, 300dpi, 50.55x24.50 cm, bb=0 0 1433 695
+ \caption{Hierarchical cluster of Rio de Janeiro.}
+ \label{fig:cluster_rj}
+\end{figure}
 
 For each city, a feature matrix was assembled from the set of time series of 
 each other time series from its cluster.
+\todo[inline]{matrix example of the data clustered - Coloco uma generica ou um corte da real?}
 
-matrix example of the data clustered
-
-A single city model was trained for a few selected cities to serve as a 
-baseline against which to compare the effectiveness of the using sister 
-cities (within the same cluster) cluster as predictors.
+A single city model was fitted  for a few  cities to serve as a 
+baseline against which to compare the effectiveness of the using a cluster of  
+cities as predictors.
 
 \subsection{Forecasting}
 
-We tried tree diferent models bla bla
-
+We fit tree different classes of models to forecast the incidence timeseries. For all models we adopted a forecast window of 4 weeks, meaning that from any moment in time the model will generate forecasts for the next 4 weeks based only on historical data up to that point.
 
 \begin{description}
- \item \textbf{Random Forest}
+ \item \textbf{Random Forest:}
+ We used a Random Forest regression model to predict a single point in the future based on historical data. In order to turn a time series prediction problem into a regression model, we transformed the series regressors into a vector containing not just the last observation of each series but the {\cal D} most recent.
  
- falar sobre modelagem, 
+ \begin{equation}
+y_{t+\tau} = \sum_{d=0}^{\cal D} \beta_d X_{t-d}
+\end{equation}
+\todo[inline]{não sei se esta equação está correta}
+$X_{t-d}$ is the vector with the values of all predictor series at time $t-d$, including $y$. The model predicts the incidence at a particular week in the future $y_{t+\tau}$, thus since we wanted to predict 4 weeks into the future, 4 separate models were fitted to data with $\tau$ varying from 1 to 4.
+\todo[inline]{colocar aqui um exemplo da feature matrix $X$}
+
+ 
  \item \textbf{Long short term memory (LSTM)}
+ A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table xx. the model was trained for 300 epochs using a MLSE loss function defined in equation (xx) A look back 
+of 4 weeks a forecasting window of 4 weeks was chosen.
+\todo[inline]{descrever o tensor de dados do modelo LSTM}
+
  
  A LSTM model was defined with topology given in table xx. the model was trained 
 for 300 epoch using a custom loss function defined in equation (xx) A look back 
 of 4 weeks a forecasting window of 10 weeks were chosen.
 
+
  
- \item \textbf{Lasso}
+ \item \textbf{Lasso regression:}
+  A LASSO model is an estimator for linear regression models which also performs variable selection as it can estimate sparse coefficient matrices. We used the same feature matrix used by the Random Forest model for the LASSO model; Additionally, we applied an evolutionary tree-based optimization procedure proposed by \citet{Olson_Bartley_Urbanowicz_Moore_2016} to define the final LASSO model.
  
 \end{description}
 
@@ -267,6 +303,10 @@ of 4 weeks a forecasting window of 10 weeks were chosen.
 \section{Results}
 
 \subsection{Cluster analysis}
+
+We performed the clustering of cities as described above for every state in the Infodengue dataset. Figure \ref{fig: cluster_cf} shows the incidence series for one cluster for the entire historical period available. We can see that cities clustered together display similar incidence patterns. Depictions of the remaining clusters can be found in the supplementary material. Cluster sizes are variable.
+
+
 The cluster found within each state are shown in figures ... The clusters can 
 also be seen in the map in figures xxx.
 \begin{figure}[h]
@@ -277,6 +317,7 @@ also be seen in the map in figures xxx.
 \end{figure}
 
 \subsection{Forecasting}
+We measured the performance of the forecasting models by the magnitude of the prediction error for week $t+4$ where $t$ is the last week observed. The prediction errors were calculated as mean squared error (MSE), and mean squared log error(MSLE).
 
 Figures xx and yy show the performance of the prediction  both \emph{in-sample} 
 and  \emph{out-of-sample}.
