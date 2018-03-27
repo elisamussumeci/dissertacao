@@ -290,19 +290,40 @@ $X_{D-d}$ is the vector with the values of all predictor series at time $D-d$, i
  
  \item \textbf{Long short term memory (LSTM)}
  
- A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table xx. the model was trained for 300 epochs using a MLSE loss function defined in equation (xx) A look back of 4 weeks a forecasting window of 4 weeks was chosen.
-\todo[inline]{descrever o tensor de dados do modelo LSTM}
+ A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table \ref{tab:lstm}. The model was trained for 100 epochs with a look back of 4 weeks and a forecasting window of also 4 weeks. 
+The loss function used was the MSLE defined in equation (\ref{eq:msle}), where $y, \hat{y}$ are the true and predicted value, respectively:
 
- 
- A LSTM model was defined with topology given in table xx. the model was trained 
-for 300 epoch using a custom loss function defined in equation (xx) A look back 
-of 4 weeks a forecasting window of 10 weeks were chosen.
+\begin{equation}
+MSLE = \dfrac{1}{n} \sum_{i=1}^{i=n} (log(y_i +1) - log(\hat{y}_i +1))^{2}
+\label{eq:msle}
+\end{equation}
 
+\begin{table}
+\begin{center}
+\begin{tabular}{cccc}
+  \textbf{Layer} & \textbf{Output} & \textbf{Activation} & \textbf{Dropout}\\
+  \hline
+  LSTM  & (1,4,4) & tanh & 0.2 \\
+  LSTM  & (1,4,4) & tanh & 0.2\\
+  LSTM  & (1,4) & tanh & 0.2\\
+  Dense & (1,4) & relu & - \\
+  \hline
+\end{tabular}
+\caption{Parameters used to build LSTM model}
+\label{tab:lstm}
+\end{center}
+\end{table}
 
+\todo[inline]{preciso explicar as funções de ativação?}
  
- \item \textbf{Lasso regression:}
-  A LASSO model is an estimator for linear regression models which also performs variable selection as it can estimate sparse coefficient matrices. We used the same feature matrix used by the Random Forest model for the LASSO model; Additionally, we applied an evolutionary tree-based optimization procedure proposed by \citet{Olson_Bartley_Urbanowicz_Moore_2016} to define the final LASSO model.
+ \item \textbf{Lasso regression}
  
+  A Lasso model is an estimator for linear regression models which also performs variable selection as it can estimate sparse coefficient matrices. 
+  
+  We fitted a cross-validation Lasso model using the Least Angle Regression (LARS) defined by \citet{efron2004least}; Additionally, we applied an evolutionary tree-based optimization procedure proposed by \citet{olson2016evaluation} to define the final Lasso model.
+  
+    The feature matrix used was the same used by the Random Forest model (figure \ref{fig:rf_matrix}).
+  
 \end{description}
 
 
@@ -310,7 +331,7 @@ of 4 weeks a forecasting window of 10 weeks were chosen.
 
 \subsection{Cluster analysis}
 
-We performed the clustering of cities as described above for every state in the Infodengue dataset. Figure \ref{fig: cluster_cf} shows the incidence series for one cluster for the entire historical period available. We can see that cities clustered together display similar incidence patterns. Depictions of the remaining clusters can be found in the supplementary material. Cluster sizes are variable.
+We performed the clustering of cities as described above for every state in the Infodengue dataset. Figure \ref{fig:cluster_cf} shows the incidence series for one cluster for the entire historical period available. We can see that cities clustered together display similar incidence patterns. Depictions of the remaining clusters can be found in the supplementary material. Cluster sizes are variable.
 
 
 The cluster found within each state are shown in figures ... The clusters can 
@@ -321,6 +342,7 @@ also be seen in the map in figures xxx.
  \includegraphics[scale=0.4]{./cluster_3300209.png}
  % cluster_3300209.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
  \caption{cluster}
+ \label{fig:cluster_cf}
 \end{figure}
 
 \subsection{Forecasting}
