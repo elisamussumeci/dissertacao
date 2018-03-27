@@ -219,6 +219,14 @@ InfoDengue \citep{Codeco046193} is an integrated dengue alert system, developed 
 
 The data consist of the weekly series of dengue incidence,  temperature, humidity, pressure, precipitation intensity, and tweets about Dengue in each observed city. It ranges from 2010 until today.
 
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=\textwidth]{rio_raw_series.png}
+ % rio_raw_series.png: 4000x4000 px, 400dpi, 25.40x25.40 cm, bb=0 0 720 720
+ \caption{Time series from Rio de Janeiro features}
+ \label{fig: rio_raw}
+\end{figure}
+
 
 \subsection{Data modeling}
 
@@ -232,7 +240,7 @@ $$d(u,v) = max(dist(u[i],v[j])), $$
 
 for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set to $0.6*max(z))$, where $z$ is the vector of the pairwise correlation distances of the cities. We can see in  \ref{fig:corr_rj} the correlation matrix of the cities from the state of Rio de Janeiro, the treshold define the distance between the clusters in \ref{fig:cluster_rj}.
 
-\begin{figure}
+\begin{figure}[h!]
  \centering
  \includegraphics[scale=0.4]{cluster_corr_RJ.png}
  % cluster_corr_RJ.png: 3469x3389 px, 400dpi, 22.03x21.52 cm, bb=0 0 624 610
@@ -241,7 +249,7 @@ for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set t
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[h!]
  \centering
  \includegraphics[width=\textwidth]{clusterRJ_06.png}
  % clusterRJ_0.6.png: 5971x2894 px, 300dpi, 50.55x24.50 cm, bb=0 0 1433 695
@@ -263,35 +271,26 @@ We fit tree different classes of models to forecast the incidence timeseries. Fo
 
 \begin{description}
  \item \textbf{Random Forest:}
+ 
  We used a Random Forest regression model to predict a single point in the future based on historical data. In order to turn a time series prediction problem into a regression model, we transformed the series regressors into a vector containing not just the last observation of each series but the {\cal D} most recent.
  
 \begin{equation}
-y_{D+\tau} = \sum_{d=0}^{D-1} \beta_d X_{t-d}
+y_{D+\tau} = \sum_{d=0}^{D-1} \beta_d X_{D-d}
 \end{equation}
 
-$X_{D-d}$ is the vector with the values of all predictor series at time $D-d$, including $y$. The model predicts the incidence at a particular week in the future $y_{D+\tau}$, thus since we wanted to predict 4 weeks into the future, 4 separate models were fitted to data with $\tau$ varying from 1 to 4.
+$X_{D-d}$ is the vector with the values of all predictor series at time $D-d$, including $y$. The model predicts the incidence at a particular week in the future $y_{D+\tau}$, thus since we wanted to predict 4 weeks into the future, 4 separate models were fitted to data for each $\tau$ varying from 1 to 4.
 
 
-\begin{figure}[h]
- \centering
- \includegraphics[width=\textwidth]{rio_raw_series.png}
- % rio_raw_series.png: 4000x4000 px, 400dpi, 25.40x25.40 cm, bb=0 0 720 720
- \caption{Time series from Rio de Janeiro features}
- \label{fig: rio_raw}
-\end{figure}
-
- 
- \item \textbf{Long short term memory (LSTM)}
- A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table xx. the model was trained for 300 epochs using a MLSE loss function defined in equation (xx) A look back
- 
  \begin{figure}
  \includegraphics[width=\textwidth]{rf_features.pdf}
  % rf_features.pdf: 479x180 px, 72dpi, 16.90x6.35 cm, bb=0 0 479 180
- \caption{Features matrix example from Random Forest}
+ \caption{Features matrix and target vector example when $D=4$ and $\tau = 4$ }
  \label{fig:rf_matrix}
 \end{figure}
-
-of 4 weeks a forecasting window of 4 weeks was chosen.
+ 
+ \item \textbf{Long short term memory (LSTM)}
+ 
+ A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table xx. the model was trained for 300 epochs using a MLSE loss function defined in equation (xx) A look back of 4 weeks a forecasting window of 4 weeks was chosen.
 \todo[inline]{descrever o tensor de dados do modelo LSTM}
 
  
