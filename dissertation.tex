@@ -219,15 +219,6 @@ InfoDengue \citep{Codeco046193} is an integrated dengue alert system, developed 
 
 The data consist of the weekly series of dengue incidence,  temperature, humidity, pressure, precipitation intensity, and tweets about Dengue in each observed city. It ranges from 2010 until today.
 
-\begin{figure}
- \centering
- \includegraphics[width=\textwidth]{rio_raw_series.png}
- % rio_raw_series.png: 4000x4000 px, 400dpi, 25.40x25.40 cm, bb=0 0 720 720
- \caption{Time series from Rio de Janeiro features}
- \label{fig: rio_raw}
-\end{figure}
-
-\todo[inline]{as séries têm que começar em 2010, mesmo que os tweets só comecem em 2012}
 
 \subsection{Data modeling}
 
@@ -260,7 +251,7 @@ for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set t
 
 For each city, a feature matrix was assembled from the set of time series of 
 each other time series from its cluster.
-\todo[inline]{matrix example of the data clustered - Coloco uma generica ou um corte da real? Põe uma genérica indicando as features usadas}
+\todo[inline]{matrix example of the data clustered - Coloco uma generica ou um corte da real?}
 
 A single city model was fitted  for a few  cities to serve as a 
 baseline against which to compare the effectiveness of the using a cluster of  
@@ -278,19 +269,28 @@ We fit tree different classes of models to forecast the incidence timeseries. Fo
 y_{D+\tau} = \sum_{d=0}^{D-1} \beta_d X_{t-d}
 \end{equation}
 
-$X_{t-d}$ is the vector with the values of all predictor series at time $t-d$, including $y$. The model predicts the incidence at a particular week in the future $y_{D+\tau}$, thus since we wanted to predict 4 weeks into the future, 4 separate models were fitted to data with $\tau$ varying from 1 to 4.
+$X_{D-d}$ is the vector with the values of all predictor series at time $D-d$, including $y$. The model predicts the incidence at a particular week in the future $y_{D+\tau}$, thus since we wanted to predict 4 weeks into the future, 4 separate models were fitted to data with $\tau$ varying from 1 to 4.
 
 
-\begin{tabular}{cccc|c}
- $f_1$ & $f_2$ & $f_3$ & $f_4$ & $2$\\
- $f_2$  & $f_3$ & $f_4$ & $f_5$ & $1$\\
-\end{tabular}
-
-\todo[inline]{colocar aqui um exemplo da feature matrix $X$}
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=\textwidth]{rio_raw_series.png}
+ % rio_raw_series.png: 4000x4000 px, 400dpi, 25.40x25.40 cm, bb=0 0 720 720
+ \caption{Time series from Rio de Janeiro features}
+ \label{fig: rio_raw}
+\end{figure}
 
  
  \item \textbf{Long short term memory (LSTM)}
- A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table xx. the model was trained for 300 epochs using a MLSE loss function defined in equation (xx) A look back 
+ A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table xx. the model was trained for 300 epochs using a MLSE loss function defined in equation (xx) A look back
+ 
+ \begin{figure}
+ \includegraphics[width=\textwidth]{rf_features.pdf}
+ % rf_features.pdf: 479x180 px, 72dpi, 16.90x6.35 cm, bb=0 0 479 180
+ \caption{Features matrix example from Random Forest}
+ \label{fig:rf_matrix}
+\end{figure}
+
 of 4 weeks a forecasting window of 4 weeks was chosen.
 \todo[inline]{descrever o tensor de dados do modelo LSTM}
 
@@ -316,6 +316,7 @@ We performed the clustering of cities as described above for every state in the 
 
 The cluster found within each state are shown in figures ... The clusters can 
 also be seen in the map in figures xxx.
+
 \begin{figure}[h]
  \centering
  \includegraphics[scale=0.4]{./cluster_3300209.png}
