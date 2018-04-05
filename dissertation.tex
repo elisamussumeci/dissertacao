@@ -1,5 +1,6 @@
 \documentclass[12pt]{report}
 \usepackage{setspace}
+\usepackage{array}
 \usepackage{amsmath,amssymb}
 \usepackage{amsfonts}
 \usepackage{todonotes}
@@ -7,13 +8,25 @@
 \usepackage[pdftex,bookmarks=true,bookmarksopen=false,bookmarksnumbered=true,colorlinks=true,linkcolor=black]{hyperref}
 \usepackage{float}
 \usepackage[utf8]{inputenc}
+\usepackage{longtable}
 \usepackage{natbib}
+% \usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage{tabularx, booktabs} %% Load packages that you use
+
+\definecolor{Gray}{gray}{0.95}
+\definecolor{Blue}{rgb}{0.94,0.97,1.0}
+\definecolor{pink}{RGB}{201,39,66}
+
+
+\newcolumntype{g}{>{\columncolor{Gray}}c}
+\newcolumntype{b}{>{\columncolor{Blue}}c}
 
 \begin{document}
 
 \begin{titlepage}
 \begin{center}
-{\LARGE Getulio Vargas Foundation}\\
+{\LARGE Fundação Getulio Vargas}\\
 \vspace{0.3cm}
 {\LARGE Applied Mathematics School}\\
 \vspace{0.3cm}
@@ -89,7 +102,7 @@ resumo...
 \end{center}
 \vspace{1pt}
 
-We use the Infodengue database of incidence and climate time-series, to train predictive models for the weekly number of cases of dengue in 733 cities of Brazil. To overcome limitation in the length of timeseries available to train the model, we included the time series of similar cities as predictors in the model of each city. The LSTM recurrent neural network model attained the highest performance in predicting future incidence on dengue in cities of different sizes. 
+We use the Infodengue database of incidence and climate time-series, to train predictive models for the weekly number of cases of dengue in 790 cities of Brazil. To overcome limitation in the length of timeseries available to train the model, we included the time series of similar cities as predictors in the model of each city. Machine Learning models to forecasting have been used in the past years and have achieved great results. In this work we will compare three machine learning models: Random Forest, Lasso and Long-short term memory neural network.
 
 \thispagestyle{empty}
 
@@ -118,16 +131,21 @@ Instead of proposing parsimonious models built from previous knowledge of the de
 \newpage
 \chapter{Literature Review}
 
-\section{Time Series}
-\subsection{Multiple time series regression}
-
-
 \section{Epidemic forecasting}
- 
-Time series forecasting consists in use models to predict future values based on previously observed values.
- 
- 
-In epidemiology studies, forecasting is important to understand disease spread over a period of time
+
+The spread of a infectious disease to a large number of people within a short period of time is denominated an \textit{epidemic}. To predict if a epidemic is going to occur, we observe the incidence of this disease trough the past time, and also the features that may have a correlation that can help to explain this epidemic.
+
+When looking to an incidence, or any other type of value, trough time, we are looking to time series.
+
+\subsection{Time Series}
+
+A time series is a series of data points observed trough time. It is a extensively studied theme (\citet{box2015time}, \citet{tong1990non}, \citet{scharf1991statistical}), that can lead to important results, especially when dealing with predictions.
+
+Time series analysis comprises methods for analyzing the observed data in order to extract meaningful statistics and new information. Observing some characteristics from time series, such as the seasonality, trends and cycles, helps to understand the data, and therefore to choose the best technique to apply and make accurate predictions.
+
+\subsection{Forecasting}
+
+Time series forecasting consists of the use models to predict future values based on previously observed values. To model the data 
 
 It's commom to use time series forecasting models to predict epidemic
  
@@ -143,70 +161,235 @@ Apresentar a diferença entre predição de series temporas simples e multiplas.
 
 
 \section{Hierarchical Clustering}
-\subsection{clustering time series}
+
+Clustering is a statistical technique for data analysis, and extremely useful in data exploratory. The main goal of such technique is to group a set of elements into subsets of similar elements. Each element must be more similar to elements of the same subset than to elements of the others subsets.
+
+Cluster analysis itself is not one specific algorithm, but the general task to be solved. For each specific data set or expected output there'll be a more efficient clustering algorithm to be applied, therefore, clustering can be formulated as a multi-objective optimization problem. It's outputs strongly depends of the data preprocessing, which makes the use of algorithms not the full process when creating clusters.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{cluster.png}
+\caption{Example of clustering}
+\label{fig:ex_clus}
+\end{figure}
+
+There are several cluster models, such as connectivity models, centroid models, distribution models, etc. In this article we'll focus on the hierarchical clustering, a connectivity model.
+
+Hierarchical clustering is a method of cluster analysis which builds a hierarchy between its' clusters. There are basically two types of algorithms when talking about hierarchical clusters: the agglomerative and the divisive (\citet{rokach2005clustering}). The main difference between them is that the the agglomerative starts with each elements being it's own cluster and then pairs with another's until all are connected (bottom up approach); and on the divisive, all elements starts as a unique cluster that are recursively split down into the hierarchy (top down approach).
+
+To define if a set of elements must be clustered, the algorithm base it's decision into an appropriate \textit{metric}. This metric calculate a distance between all elements, and will influence the shape of the clusters, as some elements may be close to one another according to one distance and farther away according to another.
+
+The \textit{linkage} criteria determines the distance between clustered sets as a function of the pairwise distances between the elements of each set.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ccc}
+ & Euclidean distance & $\sqrt{\sum_i (u_i - v_i)^2}$\\
+ & Correlation & $1 - \dfrac{(u - \bar{u}) \cdot (v-\bar{v})}{\|(u - \bar{u}) \|_{2} \|v-\bar{v} \|_{2}}  $\\ 
+
+\end{tabular}
+\end{center}
+\end{table}
 
 \section{Machine Learning and forecasting}
 
-machine learning is bla bla
+Machine learning is a field of computer science that has the goal to devise complex models and algorithms that can learn from data and lend themselves to prediction. There are several techniques and algorithms inside this field that deals with traditional problems such as classification, regression and clustering. In figure \ref{fig:ml} we have a \textit{machine learning algorithm map}\footnote{source https://machinelearningmastery.com/} with some of the most famous algorithms.
 
-machine learning techniques have been used to forecast as show in ref and ref. It bring good results since
-it cand bla bla ref.
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{MachineLearningAlgorithms.png}
+\caption{Machine Learning algorithms map}
+\label{fig:ml}
+\end{figure}
 
-Neural networks is one technique that has been researched quite 
-extensively, and has often been shown to beat time series approaches ref 
+Machine learning techniques can also be useful to forecast problems, as shown in \citet{shen2012stock}, \citet{santillana2015combining} and \citet{bai2005prediction}. 
 
-explain why these kind of models are good for forecasting
+\todo[inline]{explain why these kind of models are good for forecasting}
 
-\subsection{Random Forest and Lasso}
+In this article we'll approach tree machine learning methods: Random Forest, LASSO and LSTM.
 
-\begin{description}
- \item Random Forest
-  
- Random forests  are an ensemble learning method for classification, 
- regression and other tasks, that operate by constructing a multitude of decision trees at training time 
- and outputting the class that is the mode of the classes (classification) or mean prediction (regression) 
- of the individual trees.
- 
- Decision tree learning is a method commonly used in data mining. The goal is to create a model 
- that predicts the value of a target variable based on several input variables. 
- 
- The difference between Random Forest algorithm and the decision tree algorithm is that in 
- Random Forest, the process es of finding the root node and splitting the feature nodes will run
- randomly.
- 
- Add formula
- 
- \item Lasso
+\subsection{Random Forest}
+
+\subsubsection{Decision Trees}
+
+Decision Trees are a type of supervised learning method that builds classification and regression models applying a tree structure. The model learn decision rules that are used to predict the values of the target variable.
+
+The decision tree is created by splitting the dataset into smaller homogeneous subsets and associating them based on some inferred rule. In figure we have an example of this construction.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth/2]{decision_tree.pdf}
+\label{fig:decision_tree}
+\caption{Decision Tree example}
+\end{figure}
+
+Decision Trees are extremely fast and easy to interpret; They perform well on large datasets and can handle numerical and categorical data. The deeper the tree, the more complex the decision rules and the fitter the model. The one big disadvantage of decision trees is that they are prone to overfit.
+
+As deeper the tree is, smaller will become the subsets, which will result in a very accurate model only for the specific training set, that results in a overfitted model. One way to combat this issue is by setting a max depth, this would limit our risk of overfitting; but, this will be at the expense of error due to bias and reduce our predictive quality.
+
+The answer to minimize both error due to bias and error due to variance is to improve our Decision Tree to a Random Forest model.
+
+\subsubsection{Random Forest}
+
+Random Forests (\citet{Breiman2001}) are an learning method for classification and regression build from the ensemble of multiple decision trees. The ability to limit overfitting without substantially increasing error due to bias is what make Random Forest a such powerful method.
+
+The Random Forest algorithm applies a bagging method to the decision trees, which consist in select N random samples with replacement from the training set and fits a modified tree learning algorithm to each one of them.
+
+This modified tree learning algorithm instead of looking through all features in order to select the most optimal split-point, is limited to a random subset of features to choose. This process, usually called \textit{feature bagging}, allows the sub-trees to have a minor correlation between them, which increase the performance of the bagging method once that combining predictions from multiple models in ensembles works better if the predictions from the sub-models are weakly correlated.(add ref)
+
+The number of features p that can be searched at each split point is specified as a parameter to the algorithm. This value can be tune it using cross validation, the default is usually $p/3$ for regression models and $\sqrt{p}$ for classification models.
+
+Given the data $D=\{(X_1,y_1), (X_2,y_2), ... ,(X_n, y_n)\}$, where $X_n$ is the features vector and $y_n$ is the target value, we define $h = \{h(X|\theta_1), h(X|\theta_2), ...,h(X|\theta_k)\}$ as the set of decision trees to ensemble, where $\theta_k$ is the vector of $p$ features randomly chosen. 
+
+Our random forest predictor $f(X)$ is defined by:
+
+$$f(X) = \dfrac{1}{k} \sum_{i=1}^{k} h(X|\theta_i)$$
+
+The uncertainty of the prediction by the standard deviation:
+
+$$\sigma = \sqrt{\dfrac{\sum_{i=1}^{k} (h(X|\theta_i) - f(X))}{k-1}}$$
+
+\subsection{LASSO}
  
  In statistics and machine learning, lasso (least absolute shrinkage and selection operator)
  (also Lasso or LASSO) is a regression analysis method that performs both variable selection and
  regularization in order to enhance the prediction accuracy and interpretability of the statistical
  model it produces. It was introduced by Robert Tibshirani in 1996 based on Leo Breiman’s
  nonnegative garrote.
- 
- Lasso was originally introduced in the context of least squares, and it can be instructive to consider 
- this case first, since it illustrates many of lasso’s properties in a straightforward setting.
- 
-\end{description}
+Given the objective function
 
+\begin{equation}
+\dfrac{1}{N} \sum_{i=1}^{N} f(x_i,y_i,\alpha,\beta)
+\end{equation}
+ 
+The lasso regularized estimator is the solution of equation \ref{eq:lasso}
+
+\begin{equation}
+\min_{\alpha, \beta} \left \{ \dfrac{1}{N} \sum_{i=1}^{N} f(x_i,y_i,\alpha,\beta)  \right \}, \ \ \text{subject to} \ \| \beta \|_{1} \leq t 
+\label{eq:lasso}
+\end{equation}
 
 \subsection{Long-short term memory (LSTM)}
 
-Recurrent neural networks ADD REF are neural networks with loops in them, allowing information
-to persist. They can be thought of as multiple copies of the same network, each passing a message
-to a successor.
+\subsubsection{Artificial Neural Networks}
 
-RNN's have great performance  in most cases but they can't handle long-term dependencies. That 
-means that when the gap between the relevant information and the output is too large, the network
-become unable to learn to connect the information.
+Artificial Neural Networks (ANN) are collections of connected units called artificial neurons. Each connection between artificial neurons can transmit a signal from one to another, usually this signal is a real number, and the output of each neuron is calculated by a non-linear function of the sum of its inputs.
+Those connections have weights that increases or decreases the strength of the signal and are adjusted at the learning process. 
 
-Long Short Term Memory networks (add ref )are a special kind of RNN, capable of learning
-such long-term dependencies. In each cell of chain the network decides whoch informations to keep
-and which to forget, etcs
+Neurons are organized in layers, each layer may apply a different kind of transformation (activation function) to it's inputs. Figure \ref{fig:ann} show us a example of the structure of a neural network.
 
-add colah diagram step by step
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.4]{ann.pdf}
+\caption{Example of a artificial neural network structure. In this example we have a input layers, one hidden layer and the output layer. Each circle is a neuron.}
+\label{fig:ann}
+\end{figure}
 
-\newpage
+
+\subsubsection{Recurrent Neural Networks}
+
+Recurrent neural networks (RNN) are neural networks with loops in them, allowing information to persist. They can be thought of as multiple copies of the same network, each passing a message to a successor. In the figure \ref{fig:rnn} we have the structure of a RNN, where each cell A is the chunk of a neural network,  $x_t$ is the cell input and $h_t$ is the cell output.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.35]{rnn.pdf}
+\caption{Example of a unrolled recurrent neural network.}
+\label{fig:rnn}
+\end{figure}
+
+RNN's learns to use the past information, that means, they remember the information given at time $t_0$ when predicting time $t_\tau$. They usually have great performance when the gap between $t_\tau - t_0$ is small; but they can't handle long-term dependencies. So when $t_\tau - t_0$ is too large, the network become unable to learn to connect the information (which in theory should be able). This problem was extensively explored by \citet{bengio1994learning}.
+
+\subsubsection{Long-short term memory}
+
+Long-short Term Memory Networks (\citet{hochreiter1997long}) are a special kind of RNN, capable of learning long-term dependencies.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[height=\textheight/2]{lstm1.pdf}
+\caption{ala}
+\label{fig:lstm1}
+\end{figure}
+
+In each cell of chain the network decides which informations to keep and which to forget.
+
+Two important elements from the LSTM cell are the cell state and the gates. The cell state $C_t$, makes possible for information to flow trough the cell unchanged or with some minor interactions.The gates are responsible for those interactions by protecting and controlling the cell state, as shown in \ref{fig:lstm2}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.4]{lstm2.pdf}
+\caption{Cell state information and gate example}
+\label{fig:lstm2}
+\end{figure}
+
+Each LSTM cell has 3 gates, composed by a sigmoid neural net layer and a pointwise multiplication operation. The sigmoid layer tell the cell how much information must be kept and how much must go; it have values between 0 and 1 and it is described by the sigmoid function in \ref{eq:sigm}.
+
+\begin{equation}
+S(Z) = \dfrac{1}{1+ e^{-z}}
+\label{eq:sigm}
+\end{equation}
+
+The first gate to pass information to the cell state is the \textit{forget gate layer} which is composed by a sigmoid layer and decides which information to forget from the previous cell state $C_{t-1}$.
+It has as input the previous output value $h_{t-1}$ and a new information $x_t$ and output a value $f_t$ between 0 and 1:
+
+\begin{equation}
+f_t = \sigma(W_f \cdot [h_{t-1}, xt] + b_f)
+\label{eq:ft}
+\end{equation}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.5]{lstm3.pdf}
+\caption{LSTM first gate}
+\label{fig:lstm3}
+\end{figure}
+
+The second gate, is composed by the combination of a sigmoid layer called \textit{input gate layer} and a tanh layer, as shown in figure \ref{fig:lstm4}. This gate decides what new information we'll update to the cell state; The sigmoid layer we'll choose which previous values will be update, and the tanh layer creates the vector $\tilde{C_t}$, which contains the candidate values to be added to the state.
+
+\begin{gather}
+i_t = \sigma(W_i \cdot [h_{t-1},x_t] + b_i) \label{eq:it}\\
+\tilde{C_t} = tanh(W_c \cdot [h_{t-1},x_t] + b_C) \label{eq:c_tilde}
+\end{gather}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.5]{lstm4.pdf}
+\caption{LSTM second gate}
+\label{fig:lstm4}
+\end{figure}
+
+
+With the equations \ref{eq:ft}, \ref{eq:it} and \ref{eq:c_tilde} defined, we can update the cell state $C_{t-1}$ to $C_t$. The first thing to do is to forget the chosen information $f_t$ by multiplying to $C_{t-1}$. Than we add the combination $i_t * \tilde{C_t}$ which is the new candidate values, scaled by how much we decided to update each state value:
+
+\begin{equation}
+C_t = f_t \ast C_{t-1} + i_t \ast \tilde{C_t} 
+\label{eq:ct}
+\end{equation}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.5]{lstm5.pdf}
+\caption{Update $C_t$ cell state}
+\label{fig:lstm5}
+\end{figure}
+
+The third gate defines the output $h_t$ of the cell. We apply a tanh function to the cell state to push the values between -1 and 1, and multiply by the output of a sigmoid layer, which filters the information from the cell state that is interesting for this $h_t$.
+
+\begin{gather}
+o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o) \label{eq:ot}\\
+h_t = o_t \ast tanh(C_t) \label{eq:ht}
+\end{gather}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.5]{lstm6.pdf}
+\caption{output}
+\label{fig:lstm6}
+\end{figure}
+
+The cells from the LSTM basically receives a previous state and a new input, choose which information to storage for futures outputs, and which information to output in this state.
+This makes possible for the LSTM to learn which information to storage.
+
+\newpage	
 \chapter{Article}
 
 \section{Methodology}
@@ -215,9 +398,9 @@ add colah diagram step by step
 \subsection{Data sources}
 The dataset used in the article was provided by the InfoDengue project. 
 
-InfoDengue \citep{Codeco046193} is an integrated dengue alert system, developed as a partnership between Oswaldo Cruz Foundation, Getulio Vargas Foundation and the Ministry of health. As a unique source of carefully curated data for epidemiological studies, InfoDengue monitors 604 cities in Brazil, predicting the weekly number of new cases of dengue in each one of them.
+InfoDengue \citet{codeco2016infodengue} is an integrated dengue alert system, developed as a partnership between Oswaldo Cruz Foundation, Getulio Vargas Foundation and the Ministry of health. As a unique source of carefully curated data for epidemiological studies, InfoDengue monitors 790 cities in Brazil, predicting the weekly number of new cases of dengue in each one of them.
 
-The data consist of the weekly series of dengue incidence,  temperature, humidity, pressure, precipitation intensity, and tweets about Dengue in each observed city. It ranges from 2010 until today.
+The data consist of the weekly series of dengue incidence,  temperature, humidity, pressure, precipitation intensity, about Dengue in each observed city. It ranges from 2010 until today.
 
 \begin{figure}[h!]
  \centering
@@ -234,12 +417,6 @@ It is very difficult to accurately forecast the weekly incidence in a city based
 
 Dengue is a disease with a clear spatial dependency \citep{stoddard2013house,eisen2009use}. Therefore it makes sense to uses series from neighboring cities nearby in order to reduce uncertainty. Additionally, other cities not necessarily in the vicinity but which display similar historical series of incidence, can also be included as predictors.
 
-In order to define the set of cities with relevant predictive information for each city, we clustered all cities within a state based on the correlation distances between incidence time series for each pair of cities. The clusters were calculated hierarchically, where the distance $d$ of each pair of clusters $(u,v)$ was given by the Farthest Point Algorithm:
-
-$$d(u,v) = max(dist(u[i],v[j])), $$
-
-for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set to $0.6*max(z))$, where $z$ is the vector of the pairwise correlation distances of the cities. We can see in  \ref{fig:corr_rj} the correlation matrix of the cities from the state of Rio de Janeiro, the treshold define the distance between the clusters in \ref{fig:cluster_rj}.
-
 \begin{figure}[h!]
  \centering
  \includegraphics[scale=0.4]{cluster_corr_RJ.png}
@@ -248,22 +425,23 @@ for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set t
  \label{fig:corr_rj}
 \end{figure}
 
+In order to define the set of cities with relevant predictive information for each city, we clustered all cities within a state based on the correlation distances between incidence time series for each pair of cities. The clusters were calculated applying a  hierarchical agglomerative algorithm, where the distance $d$ of each pair of clusters $(u,v)$ was given by the Farthest Point Algorithm:
 
-\begin{figure}[h!]
- \centering
- \includegraphics[width=\textwidth]{clusterRJ_06.png}
- % clusterRJ_0.6.png: 5971x2894 px, 300dpi, 50.55x24.50 cm, bb=0 0 1433 695
- \caption{Hierarchical cluster of Rio de Janeiro.}
- \label{fig:cluster_rj}
+$$d(u,v) = max(dist(u[i],v[j])), $$
+
+for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set to $0.6*max(z))$, where $z$ is the vector of the pairwise correlation distances of the cities. We can see in  \ref{fig:corr_rj} the correlation matrix of the cities from the state of Rio de Janeiro, the treshold define the distance between the clusters in \ref{fig:cluster_rj}, \ref{fig:cluster_pr}, \ref{fig:cluster_ce}.
+
+For each city, a feature matrix was assembled from the set of time series of each other time series from its cluster.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.8]{cluster_matrix.pdf}
+\caption{Clustered data example}
+\label{fig:m_cluster}
 \end{figure}
 
-For each city, a feature matrix was assembled from the set of time series of 
-each other time series from its cluster.
-\todo[inline]{matrix example of the data clustered - Coloco uma generica ou um corte da real?}
-
 A single city model was fitted  for a few  cities to serve as a 
-baseline against which to compare the effectiveness of the using a cluster of  
-cities as predictors.
+baseline against which to compare the effectiveness of the using a cluster of cities as predictors.
 
 \subsection{Forecasting}
 
@@ -272,25 +450,29 @@ We fit tree different classes of models to forecast the incidence timeseries. Fo
 \begin{description}
  \item \textbf{Random Forest:}
  
- We used a Random Forest regression model to predict a single point in the future based on historical data. In order to turn a time series prediction problem into a regression model, we transformed the series regressors into a vector containing not just the last observation of each series but the {\cal D} most recent.
- 
+ We used a Random Forest regression model to predict a single point in the future based on historical data. In order to turn a time series prediction problem into a regression model, we transformed the series regressors (matrix \ref{fig:m_cluster})into a vector containing not just the last observation of each series but the {\cal D} most recent.
+
 \begin{equation}
-y_{D+\tau} = \sum_{d=0}^{D-1} \beta_d X_{D-d}
-\end{equation}
+y_{t+\tau} = \beta_{t} T_{t}
+\label{eq:rf_trans}
+\end{equation} 
 
-$X_{D-d}$ is the vector with the values of all predictor series at time $D-d$, including $y$. The model predicts the incidence at a particular week in the future $y_{D+\tau}$, thus since we wanted to predict 4 weeks into the future, 4 separate models were fitted to data for each $\tau$ varying from 1 to 4.
+where t=D,...,n. $T_t$ is defined as $T_t = [X_{t},X_{t-1},...,X_{t-D}]$, where $X_{t-d}$ is the vector with the values of all m predictor series at time $t-d$, where $d=0,...,D$.
+$\beta_t$ is a vector $1 x m$ which contains the weights for each value of $T_t$.
+The model predicts the incidence at a particular week in the future $y_{t+\tau}$, thus since we wanted to predict 4 weeks into the future, 4 separate models were fitted to data for each $\tau$ varying from 1 to 4.
 
+The figure \ref{fig:rf_matrix} exemplify the data transformation for the input of the model described above:
 
- \begin{figure}
- \includegraphics[width=\textwidth]{rf_features.pdf}
+ \begin{figure}[h!]
+ \includegraphics[scale=0.8]{rf_features.pdf}
  % rf_features.pdf: 479x180 px, 72dpi, 16.90x6.35 cm, bb=0 0 479 180
- \caption{Features matrix and target vector example when $D=4$ and $\tau = 4$ }
+ \caption{Feature matrix transformation for Random Forest input. The first matrix is the original data, where $a_{ij}$ is the feature $i$ at time $j$, $j=[1,..,n]$, and $y_i$ is the incidence of dengue cases at time $i$, $i=[1,...,n]$. In this example, $D=4$ and $\tau=4$, so our first vector is $T_4$, which contains all m predictors series at times $(t_1,t_2,t_3,t_4)$, and our target is $y_{t+\tau} = y_{D+\tau} = y_{8}$. The last input must contain the last target, therefore $y_{t+\tau} = y_n$ and $T_t = T_{n-4}$.}
  \label{fig:rf_matrix}
 \end{figure}
- 
+
  \item \textbf{Long short term memory (LSTM)}
  
- A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table \ref{tab:lstm}. The model was trained for 100 epochs with a look back of 4 weeks and a forecasting window of also 4 weeks. 
+ A LSTM model is a recurrent deep neural network model developed to handle predictions of timeseries. We used a LSTM model with topology given in table \ref{tab:lstm}. The model was trained for 100 epochs with a look back of 4 weeks and a forecasting window of also 4 weeks. \todo{aqui não indica o número de hidden layers, etc}
 The loss function used was the MSLE defined in equation (\ref{eq:msle}), where $y, \hat{y}$ are the true and predicted value, respectively:
 
 \begin{equation}
@@ -314,8 +496,17 @@ MSLE = \dfrac{1}{n} \sum_{i=1}^{i=n} (log(y_i +1) - log(\hat{y}_i +1))^{2}
 \end{center}
 \end{table}
 
-\todo[inline]{preciso explicar as funções de ativação?}
- 
+The feature matrix used to train the LSTM needs to be a 3 dimensional matrix, where each 'slice' is a temporal window from our features regressors (\ref{fig:m_cluster}). The first dimension of the matrix is the features, therefore has size equal to $k$; the second dimension is the number of samples that the model will use to train (total number observations - (look back + forecasting window)); the third dimension is the temporal windows cut observed (look back + forecasting window).
+
+The figure \ref{fig:lstm_matrix} exemplifies the construction of this matrix when forecasting window = 4 and look back = 4.
+
+\begin{figure}
+\centering
+\includegraphics[width = \textwidth]{lstm_matrix.pdf}
+\caption{Creation of features matrix used to train the LSTM model.}
+\label{fig:lstm_matrix}
+\end{figure}
+
  \item \textbf{Lasso regression}
  
   A Lasso model is an estimator for linear regression models which also performs variable selection as it can estimate sparse coefficient matrices. 
@@ -331,36 +522,84 @@ MSLE = \dfrac{1}{n} \sum_{i=1}^{i=n} (log(y_i +1) - log(\hat{y}_i +1))^{2}
 
 \subsection{Cluster analysis}
 
-We performed the clustering of cities as described above for every state in the Infodengue dataset. Figure \ref{fig:cluster_cf} shows the incidence series for one cluster for the entire historical period available. We can see that cities clustered together display similar incidence patterns. Depictions of the remaining clusters can be found in the supplementary material. Cluster sizes are variable.
+We performed the clustering of cities as described above for every state in the Infodengue dataset. Figure \ref{fig:cluster_cf} shows the incidence series for a few clusters for Rio de Janeiro state of the entire historical period available. We can see that cities clustered together display similar incidence patterns. Depictions of the remaining clusters can be found in the supplementary material. Cluster sizes are variable, the mean size of clusters for each state can be seen in table \ref{tab:clusters_size}.
 
+\begin{table}
+\begin{center}
+\begin{tabular}{lccc}
+  & \textbf{Number of cities} & \textbf{Number of Clusters} & \textbf{Cluster mean size}\\
+ \hline
+ \textbf{Rio de Janeiro} & 92 & 14 & 6\\
+ \textbf{Paraná} & 399 & 54 & 6 \\
+ \textbf{Ceará} & 184 & 49 & 3 \\
+ \hline
+\end{tabular}
+\label{tab:clusters_size}
+\caption{Clusters results comparison between states.}
+\end{center}
+\end{table}
 
-The cluster found within each state are shown in figures ... The clusters can 
-also be seen in the map in figures xxx.
-
-\begin{figure}[h]
+\begin{figure}[h!]
  \centering
- \includegraphics[scale=0.4]{./cluster_3300209.png}
- % cluster_3300209.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
- \caption{cluster}
+ \includegraphics[scale=0.8]{./clusters_rj_holo.pdf}
+ \caption{dengue incidence for some clusters from Rio de Janeiro state.}
  \label{fig:cluster_cf}
 \end{figure}
+
+
+The cluster found within each state are shown in figures \ref{fig:cluster_rj}, \ref{fig:cluster_ce}, \ref{fig:cluster_pr}. They can also be seen in the map in figures xxx.
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[height=\textheight]{clusterRJ_06.png}
+ % clusterRJ_0.6.png: 5971x2894 px, 300dpi, 50.55x24.50 cm, bb=0 0 1433 695
+ \caption{Hierarchical cluster of Rio de Janeiro.}
+ \label{fig:cluster_rj}
+\end{figure}
+
 
 \subsection{Forecasting}
 We measured the performance of the forecasting models by the magnitude of the prediction error for week $t+4$ where $t$ is the last week observed. The prediction errors were calculated as mean squared error (MSE), and mean squared log error(MSLE).
 
-Figures xx and yy show the performance of the prediction  both \emph{in-sample} 
-and  \emph{out-of-sample}.
+Figures xx and yy show the performance of the prediction  both \emph{in-sample} and  \emph{out-of-sample}.
 
 forecasting with cluster and without cluster?
 
-\section{Discussion}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{compar_fore_cluster_RJ.png}
+\caption{Loss comparison between models trained with and without cluster features of Rio de Janeiro state.}
+\label{fig:cluster_compar_rj}
+\end{figure}
 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{compar_fore_cluster_PR.png}
+\caption{Loss comparison between models trained with and without cluster features of Paraná state.}
+\label{fig:cluster_compar_pr}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{compar_fore_cluster_CE.png}
+\caption{Loss comparison between models trained with and without cluster features of Ceará state.}
+\label{fig:cluster_compar_ce}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{loss_count.pdf}
+\caption{Number of cities where each model achieved a better type of loss for each state (outofsample).}
+\label{fig:losses_heat}
+\end{figure}
+
+
+\newpage
+\chapter{Conclusions and Final Considerations}
 The model has show good performance for both large and small cities from various parts of Brasil. This shows that the set of predictor series selected is capable to characterize the epidemic dynamics.
 
 The extra information provided by the sister cities' series alowed the model to substantially outperform the base model. The LSTM model was capable of consistently predict the incidence pattern of non-epidemic years. 
 
-\newpage
-\chapter{Conclusions and Final Considerations}
 
 \newpage
 \phantomsection
@@ -371,5 +610,53 @@ The extra information provided by the sister cities' series alowed the model to 
 \newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{Appendices}
+\chapter*{Appendices}
+
+\scriptsize
+\begin{center}
+\begin{longtable}{l g g g b b b g g g}
+\caption{Losses of Rio de Janeiro}\\
+\input{table_loss_RJ.tex}
+\label{tab:clusters_size} 
+\end{longtable} 
+\end{center} 
+\normalsize
+
+
+\scriptsize
+\begin{center}
+\begin{longtable}{l g g g b b b g g g}
+\caption{Losses of Paraná}\\
+\input{table_loss_PR.tex}
+\label{tab:clusters_size} 
+\end{longtable} 
+\end{center} 
+\normalsize
+
+\scriptsize
+\begin{center}
+\begin{longtable}{l g g g b b b g g g}
+\caption{Losses of Ceará}\\
+\input{table_loss_CE.tex}
+\label{tab:clusters_size} 
+\end{longtable} 
+\end{center} 
+\normalsize
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[height=\textheight]{clusterPR_06.png}
+ % clusterRJ_0.6.png: 5971x2894 px, 300dpi, 50.55x24.50 cm, bb=0 0 1433 695
+ \caption{Hierarchical cluster of Paraná.}
+ \label{fig:cluster_pr}
+\end{figure}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=\textwidth]{clusterCE_06.png}
+ % clusterRJ_0.6.png: 5971x2894 px, 300dpi, 50.55x24.50 cm, bb=0 0 1433 695
+ \caption{Hierarchical cluster of Ceará.}
+ \label{fig:cluster_ce}
+\end{figure}
 
 \end{document}
