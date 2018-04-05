@@ -12,7 +12,7 @@
 \usepackage{natbib}
 % \usepackage[table]{xcolor}
 \usepackage{colortbl}
-\usepackage{tabularx, booktabs} %% Load packages that you use
+\usepackage{tabularx, booktabs}
 
 \definecolor{Gray}{gray}{0.95}
 \definecolor{Blue}{rgb}{0.94,0.97,1.0}
@@ -145,11 +145,9 @@ Time series analysis comprises methods for analyzing the observed data in order 
 
 \subsection{Forecasting}
 
-Time series forecasting consists of the use models to predict future values based on previously observed values. To model the data 
+Time series forecasting consists of the study of complex models to predict future values based on previously observed values.
 
-It's commom to use time series forecasting models to predict epidemic
- 
-The most comon models used for epidemic forecasting are:
+The most classical models used for time series forecasting are:
  
  \begin{description}
   \item Autoregressive Integrated Moving Average (ARIMA)
@@ -157,14 +155,39 @@ The most comon models used for epidemic forecasting are:
   \item VAR
  \end{description}
 
-Apresentar a diferença entre predição de series temporas simples e multiplas. Explicar cada modelo que vem sendo utilizado em prediçao multipla
+To study the performance of a model, the forecast error (residual) is calculated. It consists in the difference between the predicted and empirical value as show in equation \ref{eq:error}
 
+\begin{equation}
+E_t = Y_t - \hat{Y_t}
+\label{eq:error}
+\end{equation}
+
+where $E_t$ is the forecast error at time $t$, $Y_t$ is the real value at time $t$ and $\hat{Y_t}$ is the predicted value at time $t$. In table \ref{tab:measures} are some measures of performance calculated from the $E_t$ .
+
+\begin{table}
+\centering
+\begin{tabular}{cc}
+\toprule
+\textbf{Name} & \textbf{Equation}\\
+\midrule
+MAE & $\dfrac{\sum_{t=1}^{N} |E_t|}{N}$ \\
+\midrule
+MSE & $\dfrac{\sum_{t=1}^{N} E_{t}^{2}}{N}$ \\
+\midrule
+MAPE & $\dfrac{100}{N} \sum_{t=1}^{N} \frac{|E_t|}{|Y_t|}$ \\
+\midrule
+MASE* & $\dfrac{1}{N} \sum_{t=1}^{N} \dfrac{E_t}{ \frac{1}{N-m} \sum_{t=m+1}^{N} |Y_t-Y_{t-m}|} $\\
+\bottomrule
+\end{tabular}
+\caption{Measures to calculate loss. *m is the seasonal period; $m=1$ if non-seasonal.}
+\label{tab:measures}
+\end{table}
 
 \section{Hierarchical Clustering}
 
-Clustering is a statistical technique for data analysis, and extremely useful in data exploratory. The main goal of such technique is to group a set of elements into subsets of similar elements. Each element must be more similar to elements of the same subset than to elements of the others subsets.
+Clustering is a statistical technique for data analysis, and extremely useful in data exploratory. The main goal of such technique is to group a set of elements into subsets of similar elements. Each observation must be more similar to those of the same subset than to the others subsets.
 
-Cluster analysis itself is not one specific algorithm, but the general task to be solved. For each specific data set or expected output there'll be a more efficient clustering algorithm to be applied, therefore, clustering can be formulated as a multi-objective optimization problem. It's outputs strongly depends of the data preprocessing, which makes the use of algorithms not the full process when creating clusters.
+Cluster analysis itself is not one specific algorithm, but the general task to be solved. For each specific data set or expected output there'll be a more efficient clustering algorithm to be applied, therefore, clustering can be formulated as a multi-objective optimization problem. 
 
 \begin{figure}
 \centering
@@ -173,23 +196,48 @@ Cluster analysis itself is not one specific algorithm, but the general task to b
 \label{fig:ex_clus}
 \end{figure}
 
-There are several cluster models, such as connectivity models, centroid models, distribution models, etc. In this article we'll focus on the hierarchical clustering, a connectivity model.
+There are several cluster models, such as connectivity models, centroid models, distribution models, etc. In this work we'll focus on the hierarchical clustering, a connectivity model.
 
-Hierarchical clustering is a method of cluster analysis which builds a hierarchy between its' clusters. There are basically two types of algorithms when talking about hierarchical clusters: the agglomerative and the divisive (\citet{rokach2005clustering}). The main difference between them is that the the agglomerative starts with each elements being it's own cluster and then pairs with another's until all are connected (bottom up approach); and on the divisive, all elements starts as a unique cluster that are recursively split down into the hierarchy (top down approach).
+Hierarchical clustering is a method of cluster analysis which builds a hierarchy between its' clusters. There are basically two types of algorithms when talking about hierarchical clusters: the agglomerative and the divisive~\citep{rokach2005clustering}. The main difference between them is that the the agglomerative starts with each elements being it's own cluster and then pairs with another's until all of them are connected (bottom up approach); on the divisive, all elements starts as a unique cluster that are recursively split down into the hierarchy (top down approach).
 
-To define if a set of elements must be clustered, the algorithm base it's decision into an appropriate \textit{metric}. This metric calculate a distance between all elements, and will influence the shape of the clusters, as some elements may be close to one another according to one distance and farther away according to another.
+To define if a set of elements must be clustered, the algorithm base it's decision into an appropriate \textit{metric}. This metric calculates the distance between all elements, and will influence the shape of the clusters, as some elements may be close to one another according to one distance metric and farther away according to another. Table \ref{tab:distances} show some distance metrics.
 
-The \textit{linkage} criteria determines the distance between clustered sets as a function of the pairwise distances between the elements of each set.
+The \textit{linkage} criteria (\ref{tab:linkage}) determines the distance between clustered sets as a function of the pairwise distances between the elements of each set. If this distance between two clusters is less than some predefined threshold, than those clusters are considered brothers in the hierarchy.
 
 \begin{table}
 \begin{center}
-\begin{tabular}{ccc}
- & Euclidean distance & $\sqrt{\sum_i (u_i - v_i)^2}$\\
- & Correlation & $1 - \dfrac{(u - \bar{u}) \cdot (v-\bar{v})}{\|(u - \bar{u}) \|_{2} \|v-\bar{v} \|_{2}}  $\\ 
-
+\begin{tabular}{cc}
+\toprule
+\textbf{Distance} & \textbf{Equation}\\
+\midrule
+Euclidean & $\| u -v \|_{2}$\\[0.3cm]
+Correlation & $1 - \dfrac{(u - \bar{u}) \cdot (v-\bar{v})}{\|(u - \bar{u}) \|_{2} \|v-\bar{v} \|_{2}}  $\\[0.3cm] 
+Chebyshev & $\max\|u_i-v_i \|$ \\[0.3cm]
+Mahalanobis* & $ \sqrt{ (u-v)V^{-1} (u-v)^{T}} $ \\
+\bottomrule
 \end{tabular}
+\caption{Some metrics used for calculate distance between the vector $u$ and $v$. *V is the covariance matrix.}
+\label{tab:distances}
 \end{center}
 \end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+\textbf{Method} & \textbf{Equation}\\
+\midrule
+Single & $min(dist(u[i],v[j]))$ \\[0.3cm]
+Complete & $ max(dist(u[i],v[j]))$\\[0.3cm]
+Centroid & $\|c_s - c_t \|_{2}$ \\[0.3cm]
+Average & $ \sum_{ij} \dfrac{d(u[i],v[j])}{(|u| \ast |v|)} $ \\
+\bottomrule
+\end{tabular}
+\caption{Linkage methods used for calculate distance between the clusters $u$ and $v$. $dist(u[i],v[j])$ is the distance between all points $i$ in cluster $u$ and $j$ in cluster $v$. $c_s$ and $c_t$ are the centroids of clusters $s$ and $t$.}
+\label{tab:linkage}
+\end{center}
+\end{table}
+
 
 \section{Machine Learning and forecasting}
 
@@ -268,6 +316,8 @@ The lasso regularized estimator is the solution of equation \ref{eq:lasso}
 \min_{\alpha, \beta} \left \{ \dfrac{1}{N} \sum_{i=1}^{N} f(x_i,y_i,\alpha,\beta)  \right \}, \ \ \text{subject to} \ \| \beta \|_{1} \leq t 
 \label{eq:lasso}
 \end{equation}
+
+\todo[inline]{Add parameters legend}
 
 \subsection{Long-short term memory (LSTM)}
 
@@ -390,7 +440,7 @@ The cells from the LSTM basically receives a previous state and a new input, cho
 This makes possible for the LSTM to learn which information to storage.
 
 \newpage	
-\chapter{Article}
+\chapter{Methodology}
 
 \section{Methodology}
 
@@ -429,14 +479,14 @@ In order to define the set of cities with relevant predictive information for ea
 
 $$d(u,v) = max(dist(u[i],v[j])), $$
 
-for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set to $0.6*max(z))$, where $z$ is the vector of the pairwise correlation distances of the cities. We can see in  \ref{fig:corr_rj} the correlation matrix of the cities from the state of Rio de Janeiro, the treshold define the distance between the clusters in \ref{fig:cluster_rj}, \ref{fig:cluster_pr}, \ref{fig:cluster_ce}.
+for all points $i$ in cluster $u$ and $j$ in cluster $v$. The threshold is set to $0.6*max(z))$, where $z$ is the vector of the pairwise correlation distances of the cities. We can see in  \ref{fig:corr_rj} the correlation matrix of the cities from the state of Rio de Janeiro, the threshold defines the distance between the clusters in \ref{fig:cluster_rj}, \ref{fig:cluster_pr}, \ref{fig:cluster_ce}.
 
 For each city, a feature matrix was assembled from the set of time series of each other time series from its cluster.
 
 \begin{figure}[!ht]
 \centering
 \includegraphics[scale=0.8]{cluster_matrix.pdf}
-\caption{Clustered data example}
+\caption{Clustered features data with $n$ as the total number of observation, $m$ the total number of cities and $k$ the total number of features for each city.}
 \label{fig:m_cluster}
 \end{figure}
 
@@ -500,7 +550,7 @@ The feature matrix used to train the LSTM needs to be a 3 dimensional matrix, wh
 
 The figure \ref{fig:lstm_matrix} exemplifies the construction of this matrix when forecasting window = 4 and look back = 4.
 
-\begin{figure}
+\begin{figure}[!h]
 \centering
 \includegraphics[width = \textwidth]{lstm_matrix.pdf}
 \caption{Creation of features matrix used to train the LSTM model.}
@@ -511,7 +561,7 @@ The figure \ref{fig:lstm_matrix} exemplifies the construction of this matrix whe
  
   A Lasso model is an estimator for linear regression models which also performs variable selection as it can estimate sparse coefficient matrices. 
   
-  We fitted a cross-validation Lasso model using the Least Angle Regression (LARS) defined by \citet{efron2004least}; Additionally, we applied an evolutionary tree-based optimization procedure proposed by \citet{olson2016evaluation} to define the final Lasso model.
+  We fitted a cross-validation Lasso model using the Least Angle Regression (LARS) defined by \citet{efron2004least}; Additionally, we applied an evolutionary tree-based optimization procedure proposed by \citet{olson2016evaluation} to define the best parameters.
   
     The feature matrix used was the same used by the Random Forest model (figure \ref{fig:rf_matrix}).
   
@@ -519,6 +569,7 @@ The figure \ref{fig:lstm_matrix} exemplifies the construction of this matrix whe
 
 
 \section{Results}
+\label{results}
 
 \subsection{Cluster analysis}
 
@@ -561,44 +612,66 @@ The cluster found within each state are shown in figures \ref{fig:cluster_rj}, \
 \subsection{Forecasting}
 We measured the performance of the forecasting models by the magnitude of the prediction error for week $t+4$ where $t$ is the last week observed. The prediction errors were calculated as mean squared error (MSE), and mean squared log error(MSLE).
 
-Figures xx and yy show the performance of the prediction  both \emph{in-sample} and  \emph{out-of-sample}.
+We trained the lasso and random forest models for the single features data, that means, without the features series from it's clusters. In figure \ref{fig:cluster_compar_rj} we compared the losses out-of-sample for each type of input data. We
+can see that, in general, the models with cluster data have less error variance than the single models.
 
-forecasting with cluster and without cluster?
-
-\begin{figure}
+\begin{figure}[!ht]
 \centering
-\includegraphics[width=\textwidth]{compar_fore_cluster_RJ.png}
-\caption{Loss comparison between models trained with and without cluster features of Rio de Janeiro state.}
+\includegraphics[width=\textwidth]{cluster_model_compar_RJ.pdf}
+\caption{Loss comparison between models trained with and without cluster features for Rio de Janeiro state.}
 \label{fig:cluster_compar_rj}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!ht]
 \centering
-\includegraphics[width=\textwidth]{compar_fore_cluster_PR.png}
-\caption{Loss comparison between models trained with and without cluster features of Paraná state.}
-\label{fig:cluster_compar_pr}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{compar_fore_cluster_CE.png}
-\caption{Loss comparison between models trained with and without cluster features of Ceará state.}
+\includegraphics[width=\textwidth]{cluster_model_compar_CE.pdf}
+\caption{Loss comparison between models trained with and without cluster features for Ceará state.}
 \label{fig:cluster_compar_ce}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!ht]
 \centering
-\includegraphics[width=\textwidth]{loss_count.pdf}
-\caption{Number of cities where each model achieved a better type of loss for each state (outofsample).}
-\label{fig:losses_heat}
+\includegraphics[width=\textwidth]{cluster_model_compar_PR.pdf}
+\caption{Loss comparison between models trained with and without cluster features for Paraná state.}
+\label{fig:cluster_compar_pr}
 \end{figure}
 
+The comparison between the models efficiency is showed at figure \ref{fig:losses_heat} for each state separately. The LSTM models returned minor error than the LASSO and Random Forest when looking at the MASE and MSE losses for all the states. It is interesting to notice that the LASSO model have performed better than the Random Forest for the state of Rio de Janeiro, but in Paraná and Ceará it had a lower performance than the Random Forest.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{loss_count.pdf}
+\caption{The left column contains the heatmap matrix for each state with the count of times that a specific model performed better for each type of loss. The right column contains the percentage bar plot where of 'winning' performance for each loss.} 
+\label{fig:losses_heat}
+\end{figure}
+\todo[inline]{winning?}
+
+We calculated the qqplot (ref) for each state with the goal to understand if the predicted value belongs to the empirical distribution of the data. 
+
+Figures xx and yy show the performance of the prediction  both \emph{in-sample} and  \emph{out-of-sample}, for some cities in the states of Rio de Janeiro, Paraná and Ceará. The full cities predictions are in the appendices section.
+
+\todo[inline]{add figure prediction some cities - escolher}
 
 \newpage
 \chapter{Conclusions and Final Considerations}
 The model has show good performance for both large and small cities from various parts of Brasil. This shows that the set of predictor series selected is capable to characterize the epidemic dynamics.
 
-The extra information provided by the sister cities' series alowed the model to substantially outperform the base model. The LSTM model was capable of consistently predict the incidence pattern of non-epidemic years. 
+The extra information provided by the sister cities' series allowed the model to substantially outperform the base model. The LSTM model was capable of consistently predict the incidence pattern of non-epidemic years. 
+
+Despite the fact that the LSTM model didn't reach the peak of the epidemics, it showed consistency when predicting the start of the epidemic, which is the most valuable information when forecasting epidemics.
+
+Random Forest and Lasso models showed good results but when comparing out of sample predictions it didn't showed consistency as the lstm model.
+
+It's interesting to look to those cities and learn which model performs better and made a ensemble into those models.
+
+The LSTM model have the tendency of underestimate the epidemics which is good when thinking of resources cost for the state public health.
+
+Machine and deep learning are increasing areas with a lot of potential to forecast, outstanding classical forecasting models.
+
+LSTM have great potential and space for derivate models as pointed by ref and ref, which can lead to a specific models for epidemics forecasting in future works.
+
+It's important to remember that lstm has a high computational cost which can make random forest and lasso better option depending of the case?
+
 
 
 \newpage
